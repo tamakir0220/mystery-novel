@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { getAllNovels } from "@/lib/novels";
-import { getAllChapters, getChapter } from "@/lib/chapters";
+import { getAllChapters, getChapter, getChapterPageCounts } from "@/lib/chapters";
 import BookReader from "@/components/BookReader";
 
 export const dynamicParams = false;
@@ -48,6 +48,14 @@ export default async function ChapterPage({
     notFound();
   }
 
+  const pageCounts = await getChapterPageCounts(novelSlug);
+  const allChapters = getAllChapters(novelSlug);
+  const currentIndex = allChapters.findIndex((c) => c.slug === chapterSlug);
+  const pagesBefore = pageCounts
+    .slice(0, currentIndex)
+    .reduce((sum, n) => sum + n, 0);
+  const totalPages = pageCounts.reduce((sum, n) => sum + n, 0);
+
   return (
     <Suspense>
       <BookReader
@@ -57,6 +65,8 @@ export default async function ChapterPage({
         chapterSlug={chapter.meta.slug}
         prevChapter={chapter.prevChapter}
         nextChapter={chapter.nextChapter}
+        pagesBefore={pagesBefore}
+        totalPages={totalPages}
       />
     </Suspense>
   );

@@ -50,7 +50,7 @@ export function useReadingProgress(
     }
     const progress = getProgress();
     const saved = progress[key];
-    if (saved && saved.currentPage < totalPages) {
+    if (saved && saved.currentPage < totalPages && !saved.completed) {
       setCurrentPageState(saved.currentPage);
     }
   }, [key, totalPages, startFromEnd]);

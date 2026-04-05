@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useCallback, useRef } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import type { PageData, ChapterMeta } from "@/lib/types";
 import PageContent from "./PageContent";
-import PageIndicator from "./PageIndicator";
-import ChapterNavigation from "./ChapterNavigation";
 import { useSwipe } from "@/hooks/useSwipe";
 import { useKeyboardNavigation } from "@/hooks/useKeyboardNavigation";
 import { useReadingProgress } from "@/hooks/useReadingProgress";
@@ -19,6 +17,8 @@ interface BookReaderProps {
   chapterSlug: string;
   prevChapter: ChapterMeta | null;
   nextChapter: ChapterMeta | null;
+  pagesBefore: number;
+  totalPages: number;
 }
 
 const pageVariants = {
@@ -43,8 +43,11 @@ export default function BookReader({
   chapterSlug,
   prevChapter,
   nextChapter,
+  pagesBefore,
+  totalPages,
 }: BookReaderProps) {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const startFromEnd = searchParams.get("from") === "end";
 
   const { currentPage, setCurrentPage } = useReadingProgress(
@@ -54,43 +57,29 @@ export default function BookReader({
     startFromEnd
   );
   const [direction, setDirection] = useState(0);
-  const [chromeVisible, setChromeVisible] = useState(true);
-  const chromeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Auto-hide header/footer after 3 seconds of inactivity
-  const resetChromeTimer = useCallback(() => {
-    if (chromeTimerRef.current) clearTimeout(chromeTimerRef.current);
-    setChromeVisible(true);
-    chromeTimerRef.current = setTimeout(() => {
-      setChromeVisible(false);
-    }, 3000);
-  }, []);
-
-  useEffect(() => {
-    resetChromeTimer();
-    return () => {
-      if (chromeTimerRef.current) clearTimeout(chromeTimerRef.current);
-    };
-  }, [resetChromeTimer]);
-
-  useEffect(() => {
-    resetChromeTimer();
-  }, [currentPage, resetChromeTimer]);
 
   const goToNextPage = useCallback(() => {
     if (currentPage < pages.length - 1) {
       setDirection(1);
       setCurrentPage(currentPage + 1);
+    } else if (nextChapter) {
+      router.push(`/novels/${novelSlug}/chapters/${nextChapter.slug}`);
+    } else {
+      router.push(`/novels/${novelSlug}`);
     }
-  }, [currentPage, pages.length, setCurrentPage]);
+  }, [currentPage, pages.length, setCurrentPage, nextChapter, novelSlug, router]);
 
   const goToPrevPage = useCallback(() => {
     if (currentPage > 0) {
       setDirection(-1);
       setCurrentPage(currentPage - 1);
+    } else if (prevChapter) {
+      router.push(
+        `/novels/${novelSlug}/chapters/${prevChapter.slug}?from=end`
+      );
     }
-  }, [currentPage, setCurrentPage]);
+  }, [currentPage, setCurrentPage, prevChapter, novelSlug, router]);
 
   const handleContentTap = useCallback(
     (e: React.MouseEvent | React.TouchEvent) => {
@@ -101,21 +90,11 @@ export default function BookReader({
 
       if (relativeX < 0.25) {
         goToPrevPage();
-      } else if (relativeX > 0.75) {
-        goToNextPage();
       } else {
-        if (window.innerWidth < 768) {
-          if (chromeVisible) {
-            setChromeVisible(false);
-          } else {
-            resetChromeTimer();
-          }
-        } else {
-          goToNextPage();
-        }
+        goToNextPage();
       }
     },
-    [chromeVisible, goToNextPage, goToPrevPage, resetChromeTimer]
+    [goToNextPage, goToPrevPage]
   );
 
   useSwipe(containerRef, {
@@ -128,9 +107,8 @@ export default function BookReader({
     onPrevious: goToPrevPage,
   });
 
-  const isFirstPage = currentPage === 0;
-  const isLastPage = currentPage === pages.length - 1;
-  const isLastChapterLastPage = isLastPage && !nextChapter;
+  const globalPage = pagesBefore + currentPage + 1;
+  const progress = (globalPage / totalPages) * 100;
 
   return (
     <div
@@ -141,30 +119,17 @@ export default function BookReader({
         paddingBottom: "env(safe-area-inset-bottom)",
       }}
     >
-      {/* Header — auto-hide */}
-      <motion.header
-        initial={false}
-        animate={{
-          opacity: chromeVisible ? 1 : 0,
-          y: chromeVisible ? 0 : -20,
-        }}
-        transition={{ duration: 0.3 }}
-        className="flex-shrink-0 flex items-center justify-between px-4 py-2 text-mist text-sm"
-        style={{ pointerEvents: chromeVisible ? "auto" : "none" }}
-      >
+      {/* Header */}
+      <header className="flex-shrink-0 px-4 py-2">
         <Link
           href={`/novels/${novelSlug}`}
-          className="inline-flex items-center min-h-[44px] px-2 hover:text-gold active:text-gold/70 transition-colors"
+          className="inline-flex items-center min-h-[44px] px-2 text-mist text-sm hover:text-gold active:text-gold/70 transition-colors"
         >
           ← 目次
         </Link>
-        <span className="text-xs opacity-70 truncate max-w-[50%] text-center">
-          {chapterTitle}
-        </span>
-        <div className="w-14" />
-      </motion.header>
+      </header>
 
-      {/* Page Content Area */}
+      {/* Page Content */}
       <main
         className="flex-1 relative overflow-hidden cursor-pointer"
         onClick={handleContentTap}
@@ -190,25 +155,23 @@ export default function BookReader({
         </AnimatePresence>
       </main>
 
-      {/* Footer — auto-hide */}
-      <motion.footer
-        initial={false}
-        animate={{
-          opacity: chromeVisible ? 1 : 0,
-          y: chromeVisible ? 0 : 20,
-        }}
-        transition={{ duration: 0.3 }}
-        className="flex-shrink-0 px-4 py-2"
-        style={{ pointerEvents: chromeVisible ? "auto" : "none" }}
-      >
-        <PageIndicator current={currentPage + 1} total={pages.length} />
-        <ChapterNavigation
-          novelSlug={novelSlug}
-          prevChapter={prevChapter}
-          nextChapter={nextChapter}
-          showBackToNovel={isLastChapterLastPage}
-        />
-      </motion.footer>
+      {/* Footer */}
+      <footer className="flex-shrink-0 px-4 py-2">
+        <div className="max-w-[40rem] mx-auto">
+          <div className="h-[2px] bg-dark-border rounded-full overflow-hidden mb-1.5">
+            <div
+              className="h-full bg-gold/40 transition-all duration-300 ease-out rounded-full"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <div className="flex justify-between items-center text-xs text-mist">
+            <span className="truncate max-w-[60%]">{chapterTitle}</span>
+            <span>
+              {globalPage} / {totalPages}
+            </span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

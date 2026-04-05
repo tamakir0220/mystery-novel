@@ -33,6 +33,25 @@ export function getAllChapters(novelSlug: string): ChapterMeta[] {
   return chapters.sort((a, b) => a.order - b.order);
 }
 
+export async function getChapterPageCounts(
+  novelSlug: string
+): Promise<number[]> {
+  const chapters = getAllChapters(novelSlug);
+  const counts: number[] = [];
+  for (const chapter of chapters) {
+    const filePath = path.join(
+      getChaptersDir(novelSlug),
+      `${chapter.slug}.md`
+    );
+    const fileContent = fs.readFileSync(filePath, "utf-8");
+    const { content } = matter(fileContent);
+    const html = await markdownToHtml(content);
+    const pages = splitIntoPages(html);
+    counts.push(pages.length);
+  }
+  return counts;
+}
+
 export async function getChapter(
   novelSlug: string,
   chapterSlug: string
