@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import type { PageData, ChapterMeta } from "@/lib/types";
 import PageContent from "./PageContent";
 import PageIndicator from "./PageIndicator";
@@ -43,10 +44,14 @@ export default function BookReader({
   prevChapter,
   nextChapter,
 }: BookReaderProps) {
+  const searchParams = useSearchParams();
+  const startFromEnd = searchParams.get("from") === "end";
+
   const { currentPage, setCurrentPage } = useReadingProgress(
     novelSlug,
     chapterSlug,
-    pages.length
+    pages.length,
+    startFromEnd
   );
   const [direction, setDirection] = useState(0);
   const [chromeVisible, setChromeVisible] = useState(true);
@@ -69,7 +74,6 @@ export default function BookReader({
     };
   }, [resetChromeTimer]);
 
-  // Reset timer on page change
   useEffect(() => {
     resetChromeTimer();
   }, [currentPage, resetChromeTimer]);
@@ -88,24 +92,18 @@ export default function BookReader({
     }
   }, [currentPage, setCurrentPage]);
 
-  // Center tap toggles chrome, left tap goes back
   const handleContentTap = useCallback(
     (e: React.MouseEvent | React.TouchEvent) => {
-      const rect = (
-        e.currentTarget as HTMLElement
-      ).getBoundingClientRect();
+      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
       const clientX =
         "touches" in e ? e.changedTouches[0].clientX : e.clientX;
       const relativeX = (clientX - rect.left) / rect.width;
 
       if (relativeX < 0.25) {
-        // Left 25% → previous page
         goToPrevPage();
       } else if (relativeX > 0.75) {
-        // Right 25% → next page (desktop fallback)
         goToNextPage();
       } else {
-        // Center 50% → toggle chrome on mobile, next page as secondary
         if (window.innerWidth < 768) {
           if (chromeVisible) {
             setChromeVisible(false);
@@ -132,6 +130,7 @@ export default function BookReader({
 
   const isFirstPage = currentPage === 0;
   const isLastPage = currentPage === pages.length - 1;
+  const isLastChapterLastPage = isLastPage && !nextChapter;
 
   return (
     <div
@@ -145,9 +144,12 @@ export default function BookReader({
       {/* Header — auto-hide */}
       <motion.header
         initial={false}
-        animate={{ opacity: chromeVisible ? 1 : 0, y: chromeVisible ? 0 : -20 }}
+        animate={{
+          opacity: chromeVisible ? 1 : 0,
+          y: chromeVisible ? 0 : -20,
+        }}
         transition={{ duration: 0.3 }}
-        className="flex-shrink-0 flex items-center justify-between px-4 py-2 text-mist text-sm pointer-events-auto"
+        className="flex-shrink-0 flex items-center justify-between px-4 py-2 text-mist text-sm"
         style={{ pointerEvents: chromeVisible ? "auto" : "none" }}
       >
         <Link
@@ -162,7 +164,7 @@ export default function BookReader({
         <div className="w-14" />
       </motion.header>
 
-      {/* Page Content Area — tap zones built in */}
+      {/* Page Content Area */}
       <main
         className="flex-1 relative overflow-hidden cursor-pointer"
         onClick={handleContentTap}
@@ -191,19 +193,21 @@ export default function BookReader({
       {/* Footer — auto-hide */}
       <motion.footer
         initial={false}
-        animate={{ opacity: chromeVisible ? 1 : 0, y: chromeVisible ? 0 : 20 }}
+        animate={{
+          opacity: chromeVisible ? 1 : 0,
+          y: chromeVisible ? 0 : 20,
+        }}
         transition={{ duration: 0.3 }}
         className="flex-shrink-0 px-4 py-2"
         style={{ pointerEvents: chromeVisible ? "auto" : "none" }}
       >
         <PageIndicator current={currentPage + 1} total={pages.length} />
-        {(isFirstPage || isLastPage) && (
-          <ChapterNavigation
-            novelSlug={novelSlug}
-            prevChapter={isFirstPage ? prevChapter : null}
-            nextChapter={isLastPage ? nextChapter : null}
-          />
-        )}
+        <ChapterNavigation
+          novelSlug={novelSlug}
+          prevChapter={prevChapter}
+          nextChapter={nextChapter}
+          showBackToNovel={isLastChapterLastPage}
+        />
       </motion.footer>
     </div>
   );

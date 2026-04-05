@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { getAllNovels } from "@/lib/novels";
 import { getAllChapters, getChapter } from "@/lib/chapters";
@@ -48,13 +49,15 @@ export default async function ChapterPage({
   }
 
   return (
-    <BookReader
-      pages={chapter.pages}
-      chapterTitle={chapter.meta.title}
-      novelSlug={chapter.novelSlug}
-      chapterSlug={chapter.meta.slug}
-      prevChapter={chapter.prevChapter}
-      nextChapter={chapter.nextChapter}
-    />
+    <Suspense>
+      <BookReader
+        pages={chapter.pages}
+        chapterTitle={chapter.meta.title}
+        novelSlug={chapter.novelSlug}
+        chapterSlug={chapter.meta.slug}
+        prevChapter={chapter.prevChapter}
+        nextChapter={chapter.nextChapter}
+      />
+    </Suspense>
   );
 }

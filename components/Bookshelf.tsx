@@ -6,20 +6,11 @@ interface BookshelfProps {
 }
 
 export default function Bookshelf({ novels }: BookshelfProps) {
-  // 4冊以上なら小さめのカード、3冊以下はゆったり表示
-  const isCompact = novels.length >= 4;
-
   return (
-    <div className="max-w-6xl mx-auto px-6 pb-16">
-      <div
-        className={
-          isCompact
-            ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5"
-            : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-        }
-      >
+    <div className="max-w-6xl mx-auto px-4 md:px-6 pb-16">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-5">
         {novels.map((novel) => (
-          <BookCard key={novel.slug} novel={novel} compact={isCompact} />
+          <BookCard key={novel.slug} novel={novel} />
         ))}
       </div>
     </div>

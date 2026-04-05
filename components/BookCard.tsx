@@ -6,16 +6,15 @@ import type { NovelMeta } from "@/lib/types";
 
 interface BookCardProps {
   novel: NovelMeta;
-  compact?: boolean;
 }
 
-export default function BookCard({ novel, compact = false }: BookCardProps) {
+export default function BookCard({ novel }: BookCardProps) {
   return (
     <Link href={`/novels/${novel.slug}`}>
       <motion.div
         whileHover={{ y: -6, scale: 1.02 }}
         transition={{ type: "tween", duration: 0.2 }}
-        className="group bg-dark-surface/50 border border-dark-border rounded-xl overflow-hidden hover:border-gold/30 transition-colors"
+        className="group bg-dark-surface/50 border border-dark-border rounded-lg md:rounded-xl overflow-hidden hover:border-gold/30 transition-colors"
       >
         {/* Cover */}
         <div className="aspect-[2/3] bg-dark overflow-hidden">
@@ -27,20 +26,16 @@ export default function BookCard({ novel, compact = false }: BookCardProps) {
           />
         </div>
 
-        {/* Info */}
-        <div className={compact ? "p-3" : "p-4"}>
-          <h2
-            className={`text-parchment font-bold mb-1 group-hover:text-gold transition-colors ${
-              compact ? "text-sm" : "text-lg"
-            }`}
-          >
+        {/* Info — compact on mobile */}
+        <div className="p-2 md:p-4">
+          <h2 className="text-xs md:text-lg text-parchment font-bold mb-0.5 md:mb-1 group-hover:text-gold transition-colors line-clamp-1">
             {novel.title}
           </h2>
-          <p className={`text-mist mb-2 ${compact ? "text-xs" : "text-sm"}`}>
+          <p className="text-[10px] md:text-sm text-mist mb-1 md:mb-2">
             {novel.author}
           </p>
-          <div className="flex items-center gap-2 text-xs">
-            <span className="border border-dark-border rounded px-1.5 py-0.5 text-mist">
+          <div className="flex items-center gap-1.5 md:gap-2 text-[10px] md:text-xs">
+            <span className="border border-dark-border rounded px-1 md:px-1.5 py-0.5 text-mist">
               {novel.genre}
             </span>
             <span
@@ -51,11 +46,9 @@ export default function BookCard({ novel, compact = false }: BookCardProps) {
               {novel.status}
             </span>
           </div>
-          {!compact && (
-            <p className="text-mist/70 text-xs mt-3 line-clamp-2 leading-relaxed">
-              {novel.description}
-            </p>
-          )}
+          <p className="hidden md:block text-mist/70 text-xs mt-3 line-clamp-2 leading-relaxed">
+            {novel.description}
+          </p>
         </div>
       </motion.div>
     </Link>

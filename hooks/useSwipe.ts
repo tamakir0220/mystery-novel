@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, type RefObject } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 
 interface UseSwipeOptions {
   onSwipeLeft: () => void;
@@ -13,6 +13,7 @@ export function useSwipe(
   options: UseSwipeOptions
 ) {
   const { onSwipeLeft, onSwipeRight, threshold = 50 } = options;
+  const swipedRef = useRef(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -23,11 +24,11 @@ export function useSwipe(
     let tracking = false;
 
     function onPointerDown(e: PointerEvent) {
-      // Only track primary pointer (left mouse / single touch)
       if (e.button !== 0) return;
       startX = e.clientX;
       startY = e.clientY;
       tracking = true;
+      swipedRef.current = false;
     }
 
     function onPointerUp(e: PointerEvent) {
@@ -37,13 +38,24 @@ export function useSwipe(
       const deltaX = e.clientX - startX;
       const deltaY = e.clientY - startY;
 
-      // Only trigger if horizontal movement is dominant
-      if (Math.abs(deltaX) > threshold && Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (
+        Math.abs(deltaX) > threshold &&
+        Math.abs(deltaX) > Math.abs(deltaY)
+      ) {
+        swipedRef.current = true;
         if (deltaX < 0) {
           onSwipeLeft();
         } else {
           onSwipeRight();
         }
+      }
+    }
+
+    // Suppress click after a swipe to avoid tap+swipe double action
+    function onClickCapture(e: MouseEvent) {
+      if (swipedRef.current) {
+        e.stopPropagation();
+        swipedRef.current = false;
       }
     }
 
@@ -54,11 +66,13 @@ export function useSwipe(
     el.addEventListener("pointerdown", onPointerDown);
     el.addEventListener("pointerup", onPointerUp);
     el.addEventListener("pointercancel", onPointerCancel);
+    el.addEventListener("click", onClickCapture, true);
 
     return () => {
       el.removeEventListener("pointerdown", onPointerDown);
       el.removeEventListener("pointerup", onPointerUp);
       el.removeEventListener("pointercancel", onPointerCancel);
+      el.removeEventListener("click", onClickCapture, true);
     };
   }, [ref, onSwipeLeft, onSwipeRight, threshold]);
 }

@@ -34,19 +34,26 @@ function saveProgress(data: ProgressData) {
 export function useReadingProgress(
   novelSlug: string,
   chapterSlug: string,
-  totalPages: number
+  totalPages: number,
+  startFromEnd: boolean = false
 ) {
   const key = `${novelSlug}/${chapterSlug}`;
-  const [currentPage, setCurrentPageState] = useState(0);
+  const [currentPage, setCurrentPageState] = useState(
+    startFromEnd ? totalPages - 1 : 0
+  );
 
-  // Restore saved page on mount
+  // Restore saved page on mount (startFromEnd overrides saved progress)
   useEffect(() => {
+    if (startFromEnd) {
+      setCurrentPageState(totalPages - 1);
+      return;
+    }
     const progress = getProgress();
     const saved = progress[key];
     if (saved && saved.currentPage < totalPages) {
       setCurrentPageState(saved.currentPage);
     }
-  }, [key, totalPages]);
+  }, [key, totalPages, startFromEnd]);
 
   const setCurrentPage = useCallback(
     (page: number) => {
