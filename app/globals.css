@@ -1,26 +1,110 @@
 @import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@plugin "@tailwindcss/typography";
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-midnight: #0a0a0f;
+  --color-dark: #111118;
+  --color-dark-surface: #1a1a24;
+  --color-dark-border: #2a2a3a;
+  --color-mist: #8888a0;
+  --color-ghost: #b0b0c8;
+  --color-parchment: #d8d5cc;
+  --color-gold: #c4a35a;
+  --color-gold-light: #d4b86a;
+  --color-blood: #8b2020;
+  --color-ink: #e8e6e0;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-serif: "Noto Serif JP", "Georgia", serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(180deg, var(--color-midnight) 0%, var(--color-dark) 100%);
+  color: var(--color-ink);
+  font-family: var(--font-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography plugin overrides for dark mystery theme */
+.prose {
+  --tw-prose-body: var(--color-ink);
+  --tw-prose-headings: var(--color-parchment);
+  --tw-prose-links: var(--color-gold);
+  --tw-prose-bold: var(--color-parchment);
+  --tw-prose-quotes: var(--color-ghost);
+  --tw-prose-quote-borders: var(--color-dark-border);
+  --tw-prose-code: var(--color-gold);
+  --tw-prose-hr: var(--color-dark-border);
+  --tw-prose-counters: var(--color-mist);
+  --tw-prose-bullets: var(--color-mist);
+}
+
+/* Japanese text optimization */
+.reading-content {
+  font-feature-settings: "palt";
+  line-height: 2;
+  letter-spacing: 0.02em;
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+.reading-content p {
+  margin-bottom: 1.5em;
+  text-indent: 1em;
+}
+
+.reading-content blockquote {
+  border-left: 2px solid var(--color-gold);
+  padding-left: 1em;
+  font-style: italic;
+  color: var(--color-ghost);
+}
+
+.reading-content img {
+  border-radius: 4px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), inset 0 0 30px rgba(0, 0, 0, 0.1);
+  margin: 1.5em auto;
+  display: block;
+  max-width: 100%;
+}
+
+/* Full-page illustration */
+.full-illustration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 2rem 0;
+}
+
+.full-illustration img {
+  max-height: 70vh;
+  width: auto;
+  object-fit: contain;
+}
+
+.full-illustration .caption {
+  color: var(--color-mist);
+  font-size: 0.875rem;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-midnight);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-dark-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-mist);
 }
