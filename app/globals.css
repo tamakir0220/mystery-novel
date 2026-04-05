@@ -17,12 +17,34 @@
   --font-serif: "Noto Serif JP", "Georgia", serif;
 }
 
+html {
+  touch-action: manipulation;
+}
+
 body {
   background: linear-gradient(180deg, var(--color-midnight) 0%, var(--color-dark) 100%);
   color: var(--color-ink);
   font-family: var(--font-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Touch feedback for interactive elements */
+a:active,
+button:active {
+  opacity: 0.7;
+  transition: opacity 0.05s ease-out;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* Typography plugin overrides for dark mystery theme */

@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   description: "ミステリー小説を読み進める本棚",
 };
 
+export const viewport = {
+  viewportFit: "cover" as const,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{

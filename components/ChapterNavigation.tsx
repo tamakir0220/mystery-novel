@@ -19,7 +19,7 @@ export default function ChapterNavigation({
       {prevChapter ? (
         <Link
           href={`/novels/${novelSlug}/chapters/${prevChapter.slug}`}
-          className="text-gold/70 hover:text-gold transition-colors"
+          className="inline-flex items-center min-h-[44px] px-2 text-gold/70 hover:text-gold active:text-gold/50 transition-colors"
         >
           ← {prevChapter.title}
         </Link>
@@ -29,7 +29,7 @@ export default function ChapterNavigation({
       {nextChapter ? (
         <Link
           href={`/novels/${novelSlug}/chapters/${nextChapter.slug}`}
-          className="text-gold/70 hover:text-gold transition-colors"
+          className="inline-flex items-center min-h-[44px] px-2 text-gold/70 hover:text-gold active:text-gold/50 transition-colors"
         >
           {nextChapter.title} →
         </Link>

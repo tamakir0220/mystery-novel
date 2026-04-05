@@ -7,7 +7,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-midnight">
       {/* Header */}
-      <header className="text-center pt-16 pb-12 px-6">
+      <header className="text-center pt-10 md:pt-16 pb-8 md:pb-12 px-6">
         <h1 className="text-4xl md:text-5xl font-bold text-parchment mb-3">
           Mystery Bookshelf
         </h1>

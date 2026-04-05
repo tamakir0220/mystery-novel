@@ -39,10 +39,10 @@ export default async function NovelPage({
   return (
     <div className="min-h-screen bg-gradient-to-b from-midnight to-dark">
       {/* Back to bookshelf */}
-      <nav className="px-6 py-4">
+      <nav className="px-4 py-2">
         <Link
           href="/"
-          className="text-mist text-sm hover:text-gold transition-colors"
+          className="inline-flex items-center min-h-[44px] px-2 text-mist text-sm hover:text-gold active:text-gold/70 transition-colors"
         >
           ← 本棚に戻る
         </Link>
@@ -84,7 +84,7 @@ export default async function NovelPage({
         {chapters.length > 0 && (
           <Link
             href={`/novels/${novelSlug}/chapters/${chapters[0].slug}`}
-            className="mt-8 px-8 py-3 bg-gold/10 border border-gold/30 text-gold rounded-lg hover:bg-gold/20 transition-colors"
+            className="mt-8 px-8 min-h-[44px] flex items-center justify-center bg-gold/10 border border-gold/30 text-gold rounded-lg hover:bg-gold/20 active:bg-gold/30 transition-colors"
           >
             読み始める
           </Link>
