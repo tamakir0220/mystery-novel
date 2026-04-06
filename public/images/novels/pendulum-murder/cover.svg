@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0e0a20"/>
+      <stop offset="100%" style="stop-color:#1a0e18"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="600" fill="url(#bg)"/>
+
+  <!-- 振り子時計のモチーフ -->
+  <circle cx="200" cy="150" r="50" fill="none" stroke="#c4a35a" stroke-width="1.2" opacity="0.5"/>
+  <circle cx="200" cy="150" r="3" fill="#c4a35a" opacity="0.4"/>
+  <!-- 時計の目盛り -->
+  <line x1="200" y1="105" x2="200" y2="110" stroke="#c4a35a" stroke-width="0.8" opacity="0.4"/>
+  <line x1="200" y1="190" x2="200" y2="195" stroke="#c4a35a" stroke-width="0.8" opacity="0.4"/>
+  <line x1="155" y1="150" x2="160" y2="150" stroke="#c4a35a" stroke-width="0.8" opacity="0.4"/>
+  <line x1="240" y1="150" x2="245" y2="150" stroke="#c4a35a" stroke-width="0.8" opacity="0.4"/>
+  <!-- 時計の針 -->
+  <line x1="200" y1="150" x2="200" y2="118" stroke="#c4a35a" stroke-width="1" opacity="0.6"/>
+  <line x1="200" y1="150" x2="225" y2="140" stroke="#c4a35a" stroke-width="0.8" opacity="0.5"/>
+  <!-- 振り子 -->
+  <line x1="200" y1="200" x2="180" y2="280" stroke="#c4a35a" stroke-width="0.8" opacity="0.5"/>
+  <circle cx="180" cy="285" r="8" fill="none" stroke="#c4a35a" stroke-width="1" opacity="0.6"/>
+  <!-- 振り子の軌跡 -->
+  <path d="M160,285 Q200,295 240,285" fill="none" stroke="#c4a35a" stroke-width="0.5" opacity="0.25" stroke-dasharray="3,3"/>
+
+  <text x="200" y="375" font-family="serif" font-size="22" fill="#e8e6e0" text-anchor="middle">脅迫と振り子の殺人</text>
+  <text x="200" y="415" font-family="serif" font-size="15" fill="#8888a0" text-anchor="middle">みかん（監修：りんご）</text>
+  <line x1="120" y1="435" x2="280" y2="435" stroke="#c4a35a" stroke-width="0.5" opacity="0.4"/>
+</svg>

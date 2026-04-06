@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0e1e"/>
+      <stop offset="100%" style="stop-color:#18101a"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="600" fill="url(#bg)"/>
+
+  <!-- 酒瓶のモチーフ -->
+  <rect x="185" y="160" width="30" height="80" rx="3" fill="none" stroke="#c4a35a" stroke-width="1.2" opacity="0.5"/>
+  <rect x="190" y="140" width="20" height="25" rx="2" fill="none" stroke="#c4a35a" stroke-width="1" opacity="0.4"/>
+  <rect x="193" y="130" width="14" height="12" rx="1" fill="none" stroke="#c4a35a" stroke-width="0.8" opacity="0.35"/>
+  <!-- おちょこ -->
+  <path d="M230,230 L240,210 L260,210 L270,230" fill="none" stroke="#c4a35a" stroke-width="1" opacity="0.5"/>
+  <line x1="240" y1="230" x2="260" y2="230" stroke="#c4a35a" stroke-width="0.8" opacity="0.4"/>
+  <!-- 蔵の屋根 -->
+  <path d="M130,280 L200,250 L270,280" fill="none" stroke="#c4a35a" stroke-width="1" opacity="0.35"/>
+  <rect x="145" y="280" width="110" height="5" fill="none" stroke="#c4a35a" stroke-width="0.8" opacity="0.3"/>
+  <!-- ナイフの影 -->
+  <line x1="155" y1="170" x2="170" y2="240" stroke="#c4a35a" stroke-width="0.6" opacity="0.25"/>
+  <path d="M153,168 L157,168 L170,240 L155,240 Z" fill="none" stroke="#c4a35a" stroke-width="0.5" opacity="0.2"/>
+
+  <text x="200" y="380" font-family="serif" font-size="28" fill="#e8e6e0" text-anchor="middle">酒蔵の復讐劇</text>
+  <text x="200" y="420" font-family="serif" font-size="15" fill="#8888a0" text-anchor="middle">みかん（監修：りんご）</text>
+  <line x1="120" y1="440" x2="280" y2="440" stroke="#c4a35a" stroke-width="0.5" opacity="0.4"/>
+</svg>

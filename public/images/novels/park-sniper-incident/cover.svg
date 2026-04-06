@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#080e1a"/>
+      <stop offset="100%" style="stop-color:#12091a"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="600" fill="url(#bg)"/>
+
+  <!-- 木のモチーフ -->
+  <line x1="200" y1="280" x2="200" y2="180" stroke="#c4a35a" stroke-width="1.5" opacity="0.4"/>
+  <path d="M170,190 Q185,160 200,180 Q215,160 230,190" fill="none" stroke="#c4a35a" stroke-width="1" opacity="0.35"/>
+  <path d="M160,210 Q180,175 200,195 Q220,175 240,210" fill="none" stroke="#c4a35a" stroke-width="1" opacity="0.3"/>
+  <path d="M155,230 Q178,195 200,210 Q222,195 245,230" fill="none" stroke="#c4a35a" stroke-width="0.8" opacity="0.25"/>
+  <!-- クロスヘア（照準器） -->
+  <circle cx="200" cy="190" r="30" fill="none" stroke="#c4a35a" stroke-width="0.8" opacity="0.5"/>
+  <line x1="200" y1="155" x2="200" y2="170" stroke="#c4a35a" stroke-width="0.8" opacity="0.5"/>
+  <line x1="200" y1="210" x2="200" y2="225" stroke="#c4a35a" stroke-width="0.8" opacity="0.5"/>
+  <line x1="165" y1="190" x2="180" y2="190" stroke="#c4a35a" stroke-width="0.8" opacity="0.5"/>
+  <line x1="220" y1="190" x2="235" y2="190" stroke="#c4a35a" stroke-width="0.8" opacity="0.5"/>
+  <!-- 弾道の線 -->
+  <line x1="100" y1="140" x2="195" y2="188" stroke="#c4a35a" stroke-width="0.4" opacity="0.2" stroke-dasharray="4,4"/>
+
+  <text x="200" y="370" font-family="serif" font-size="20" fill="#e8e6e0" text-anchor="middle">深森自然公園狙撃事件</text>
+  <text x="200" y="410" font-family="serif" font-size="15" fill="#8888a0" text-anchor="middle">みかん（監修：りんご）</text>
+  <line x1="120" y1="430" x2="280" y2="430" stroke="#c4a35a" stroke-width="0.5" opacity="0.4"/>
+</svg>
